@@ -7,7 +7,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.InfrastructureServices(builder.Configuration);
+builder.Services.InfrastructureServices(builder.Configuration);  // 의존성 주입 구성한 클래스
 
 var app = builder.Build();
 

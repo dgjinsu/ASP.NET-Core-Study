@@ -29,6 +29,7 @@ namespace infrastructure.DependencyInjection
                 ServiceLifetime.Scoped // // DbContext의 생명 주기를 Scoped로 설정 (요청마다 인스턴스를 새로 생성)
             );
 
+            // JWT
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -48,7 +49,7 @@ namespace infrastructure.DependencyInjection
                 };
             });
 
-            services.AddScoped<IUser, UserRepo>();
+            services.AddScoped<IUser, UserRepo>(); // IUser 인터페이스와 UserRepo 클래스 간의 의존성을 DI 컨테이너에 등록
             // 의존성 반환
             return services;
         }
