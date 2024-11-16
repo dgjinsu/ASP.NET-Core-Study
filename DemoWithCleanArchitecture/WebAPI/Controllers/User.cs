@@ -1,5 +1,6 @@
 ﻿using Application.Contract;
 using Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,16 @@ namespace WebAPI.Controllers
         {
             var result = await user.RegisterUserAsync(registerUserDTO);
             return Ok(result);
+        }
+
+        [HttpGet("list")]
+        [Authorize]
+        public async Task<ActionResult<List<UserResponse>>> GetUserList()
+        {
+            var authHeader = HttpContext.Request.Headers["Authorization"].ToString();
+            Console.WriteLine($"Authorization Header: {authHeader}");
+
+            return Ok(await user.GetUserList());
         }
     }
 }

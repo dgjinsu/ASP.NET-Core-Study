@@ -42,6 +42,7 @@ namespace infrastructure.Repo
         private string GenerateJWTToken(ApplicationUser getUser)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
+            Console.WriteLine(configuration["Jwt:Key"]!);
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var userClaims = new[]
             {
@@ -79,6 +80,20 @@ namespace infrastructure.Repo
 
             await appDbContext.SaveChangesAsync();
             return new RegistrationResponse(true, "Registration completed");
+        }
+
+        public async Task<List<UserResponse>> GetUserList()
+        {
+            var userList = await appDbContext.Users.ToListAsync();
+
+            var userResponseList = userList.Select(user => new UserResponse
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+            }).ToList();
+
+            return userResponseList;
         }
     }
 }
