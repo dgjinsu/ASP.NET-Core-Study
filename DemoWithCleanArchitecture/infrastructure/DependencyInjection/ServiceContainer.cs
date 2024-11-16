@@ -29,7 +29,7 @@ namespace infrastructure.DependencyInjection
                 ServiceLifetime.Scoped // // DbContext의 생명 주기를 Scoped로 설정 (요청마다 인스턴스를 새로 생성)
             );
 
-            // JWT
+            // JWT Authentication 추가
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -46,6 +46,20 @@ namespace infrastructure.DependencyInjection
                     ValidIssuer = configuration["Jwt:Issuer"], // 발급자의 유효성을 검증할 때 사용할 값
                     ValidAudience = configuration["Jwt:Audience"], // 수신자의 유효성을 검증할 때 사용할 값
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)) // 토큰을 검증할 때 사용할 서명 키
+                };
+
+                // Bearer Prefix 없이 요청왔을 때 추가 
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var token = context.Request.Headers["Authorization"].FirstOrDefault();
+                        if (!string.IsNullOrEmpty(token) && !token.StartsWith("Bearer "))
+                        {
+                            context.Request.Headers["Authorization"] = $"Bearer {token}";
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
