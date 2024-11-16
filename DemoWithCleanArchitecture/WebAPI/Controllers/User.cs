@@ -33,7 +33,7 @@ namespace WebAPI.Controllers
 
         [HttpGet("list")]
         [Authorize]
-        public async Task<ActionResult<List<UserResponse>>> GetUserList()
+        public async Task<ActionResult<IEnumerable<UserResponse>>> GetUserList()
         {
             var authHeader = HttpContext.Request.Headers["Authorization"].ToString();
             Console.WriteLine($"Authorization Header: {authHeader}");

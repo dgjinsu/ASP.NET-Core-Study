@@ -82,7 +82,7 @@ namespace infrastructure.Repo
             return new RegistrationResponse(true, "Registration completed");
         }
 
-        public async Task<List<UserResponse>> GetUserList()
+        public async Task<IEnumerable<UserResponse>> GetUserList()
         {
             var userList = await appDbContext.Users.ToListAsync();
 
